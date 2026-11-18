@@ -26,6 +26,7 @@ class ContactListWindow(MainWindow):
         #UI functionalities
         self._name_line_edit.textChanged.connect(self.__on_input_changed)
         self._phone_line_edit.textChanged.connect(self.__on_input_changed)
+        self._add_button.clicked.connect(self.__on_add_contact)
     
     @Slot()
     def __on_input_changed(self) -> None:
@@ -42,6 +43,20 @@ class ContactListWindow(MainWindow):
                 self._add_button.setEnabled(True)
         else:
              self._add_button.setEnabled(False)
+
+    
+    @Slot()
+    def __on_add_contact(self) -> None:
+         """Adds contacts to the table and resets the input."""
+         new_row = self._contact_table.rowCount()
+         self._contact_table.insertRow(new_row)
+         self._contact_table.setItem(new_row, 0,
+                                QTableWidgetItem(self._name_line_edit.text()))
+         self._contact_table.setItem(new_row, 1,
+                                QTableWidgetItem(self._phone_line_edit.text()))
+         self._name_line_edit.clear()
+         self._phone_line_edit.clear()
+         self._name_line_edit.setFocus()
 
 
 
