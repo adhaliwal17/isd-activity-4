@@ -27,6 +27,8 @@ class ContactListWindow(MainWindow):
         self._name_line_edit.textChanged.connect(self.__on_input_changed)
         self._phone_line_edit.textChanged.connect(self.__on_input_changed)
         self._add_button.clicked.connect(self.__on_add_contact)
+        self._contact_table.itemSelectionChanged \
+                .connect(self.__on_table_item_selection)
     
     @Slot()
     def __on_input_changed(self) -> None:
@@ -58,6 +60,15 @@ class ContactListWindow(MainWindow):
          self._phone_line_edit.clear()
          self._name_line_edit.setFocus()
 
+    @Slot()
+    def __on_table_item_selection(self) -> None:
+         """Enables the remove button when one of the rows is selected."""
+         if len(self._contact_table.selectedItems()) >= 1:
+              self._remove_button.setEnabled(True)
+         else:
+             self._remove_button.setEnabled(False)
+              
+              
 
 
 
