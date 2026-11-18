@@ -13,4 +13,6 @@ Amarveer Singh Dhaliwal
 
 ## Additional Information
 
-[ Use this space to include additional information that may help in your learning.]
+Developed a Contact Manager application which uses the event-driven programming paradigm using PySide6. Contact Manager uses QLineEdit widgets for entering a contact's name and phone number, a QTableWidget to display the contact records, and QPushButton widgets to add and remove contacts. 
+
+ 
