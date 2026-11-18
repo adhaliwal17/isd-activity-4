@@ -1,7 +1,7 @@
 """The module defines the ContactListWindow class."""
 
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QTableWidgetItem
+from PySide6.QtWidgets import QTableWidgetItem, QMessageBox
 from ui.base.main_window import MainWindow
 
 __author__ = "Amarveer Singh Dhaliwal"
@@ -29,6 +29,8 @@ class ContactListWindow(MainWindow):
         self._add_button.clicked.connect(self.__on_add_contact)
         self._contact_table.itemSelectionChanged \
                 .connect(self.__on_table_item_selection)
+        self._remove_button.clicked.connect(self.__on_remove_contact)
+        
     
     @Slot()
     def __on_input_changed(self) -> None:
@@ -37,37 +39,54 @@ class ContactListWindow(MainWindow):
         #counting total string digits in the phone line input
         count = 0
         for char in self._phone_line_edit.text():
-             if char.isdigit():
-                  count+= 1
-             
+                if char.isdigit():
+                    count+= 1
+                
         if self._name_line_edit.text() != "" \
             and count == 10:
                 self._add_button.setEnabled(True)
         else:
-             self._add_button.setEnabled(False)
+                self._add_button.setEnabled(False)
 
     
     @Slot()
     def __on_add_contact(self) -> None:
-         """Adds contacts to the table and resets the input."""
-         new_row = self._contact_table.rowCount()
-         self._contact_table.insertRow(new_row)
-         self._contact_table.setItem(new_row, 0,
-                                QTableWidgetItem(self._name_line_edit.text()))
-         self._contact_table.setItem(new_row, 1,
-                                QTableWidgetItem(self._phone_line_edit.text()))
-         self._name_line_edit.clear()
-         self._phone_line_edit.clear()
-         self._name_line_edit.setFocus()
+        """Adds contacts to the table and resets the input."""
+        new_row = self._contact_table.rowCount()
+        self._contact_table.insertRow(new_row)
+        self._contact_table.setItem(new_row, 0,
+                            QTableWidgetItem(self._name_line_edit.text()))
+        self._contact_table.setItem(new_row, 1,
+                            QTableWidgetItem(self._phone_line_edit.text()))
+        self._name_line_edit.clear()
+        self._phone_line_edit.clear()
+        self._name_line_edit.setFocus()
 
     @Slot()
     def __on_table_item_selection(self) -> None:
-         """Enables the remove button when one of the rows is selected."""
-         if len(self._contact_table.selectedItems()) >= 1:
-              self._remove_button.setEnabled(True)
-         else:
-             self._remove_button.setEnabled(False)
-              
+        """Enables the remove button when one of the rows is selected."""
+        if len(self._contact_table.selectedItems()) >= 1:
+            self._remove_button.setEnabled(True)
+        else:
+            self._remove_button.setEnabled(False)
+
+    @Slot()
+    def __on_remove_contact(self) -> None:
+        """Removes contacts from the table through message box pop up expecting
+        user confirmation."""
+        selected_row = self._contact_table.currentRow()
+        name = self._contact_table.item(selected_row, 0).text()
+        message = QMessageBox.question(self, "Remove Contact",
+                            f"Do you want to remove the contact {name}?", 
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No)
+
+        if message == QMessageBox.StandardButton.Yes:
+            self._contact_table.removeRow(selected_row)
+        else:
+            pass
+
+
               
 
 
